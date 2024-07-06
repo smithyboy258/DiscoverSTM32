@@ -4,12 +4,12 @@
     {
         "name": "Cortex Debug",
         "cwd": "${workspaceRoot}",
-        "executable": "./Exercise16p3-FreeRTOS_UART_Flow_Control/Exercise16p3-FreeRTOS_UART_Flow_Control.elf",
+        "executable": "Demo/demo.elf",
         "request": "launch",
         "type": "cortex-debug",
         //"showDevDebugOutput": false,
         "servertype": "openocd",
-        "device": "STM32F100RBT6B", //STM32F103C8T6 is bluepill, STM32F100RBT6B is disco
+        "device": "STM32F100RB", //STM32F103C8T6 is bluepill, STM32F100RBT6B is disco
         "configFiles": [
             "interface/stlink.cfg",
             "target/stm32f1x.cfg"

@@ -4,7 +4,7 @@ ELF=$(notdir $(CURDIR)).elf
 
 # Tool path
 
-TOOLROOT="C:\STM32_Projects\Toolchain\arm-gnu-toolchain-13.3.rel1-mingw-w64-i686-arm-none-eabi\bin"
+TOOLROOT="C:\STM32_Projects\Toolchain\gcc-arm-none-eabi-9-2020-q2-update\bin"
 
 # Library path
 

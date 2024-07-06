@@ -10,7 +10,7 @@
                 "STM32f10x_MD_VL" // STM32f10x_MD_VL if disco, STM32F10X_MD if bluepill 
             ],
             "intelliSenseMode": "gcc-arm",
-            "compilerPath": "${env:ARMGCC_DIR}/arm-none-eabi-gcc.exe",
+            "compilerPath": "${env:ARMGCC_2021_DIR}/arm-none-eabi-gcc.exe",
             "compilerArgs": [
                 "-mcpu=cortex-m3",
                 "-mthumb"
