@@ -4,7 +4,7 @@
     {
         "name": "Cortex Debug",
         "cwd": "${workspaceRoot}",
-        "executable": "Demo/demo.elf",
+        "executable": "Exercise4p1-Blink/Exercise4p1-Blink.elf",
         "request": "launch",
         "type": "cortex-debug",
         //"showDevDebugOutput": false,

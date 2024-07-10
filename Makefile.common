@@ -10,6 +10,7 @@ TOOLROOT="C:\STM32_Projects\Toolchain\gcc-arm-none-eabi-9-2020-q2-update\bin"
 
 LIBROOT="C:\STM32_Projects\Projects\Discovering_STM32\Discovering_STM32\STM32F10x_StdPeriph_Lib_V3.5.0"
 
+BUILD_DIR = build
 # Tools
 
 CC=$(TOOLROOT)/arm-none-eabi-gcc

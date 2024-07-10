@@ -1,5 +1,5 @@
 int i = 0;
-int off = 5;
+int off = 8;
 
 void inc(void){
   i += off;
