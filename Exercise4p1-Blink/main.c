@@ -1,12 +1,33 @@
 #include <stm32f10x.h>
 #include <stm32f10x_rcc.h>
 #include <stm32f10x_gpio.h>
-void Delay(uint32_t nTime);
+
+void Delay(uint32_t nTime); // function Delay defined at top of file. 
+
+#define APB2ENR_TEST ((volatile uint32_t *) 0x40021018) // define a pointer to the address of the APB2ENR register. 
+
 int main(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
     // Enable Peripheral Clocks ..1 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC , ENABLE); // (1)
+    /*  
+        below line writes to the APB2 Peripheral 
+        Clock Enable Register, writing 2b10000 
+        to this register adress enables the 
+        peripheral clock for GPIOC. 
+    */
+    uint32_t current_value = *APB2ENR_TEST; // read current value at address '0x40021018'
+    *APB2ENR_TEST |= 0x10; // toggle bit that cooresponds to the peripheral clock for GPIOC. 
+
+    // below commented code does the same but uses macros 
+    // and the RCC Struct defined in the STD_peripheral 
+    // library to access the memory address of APB2ENR. 
+    // RCC->APB2ENR |= ((uint32_t)0x00000010);
+
+    // function that enables the clock and accesses 
+    // the value using macros defined in the STD_peripheral 
+    // library. 
+    // RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC , ENABLE); // (1)
 
     // Configure Pins ..2, LED on PC9 (GPIO Port C, pin 9), configured as an output. 
     GPIO_StructInit(&GPIO_InitStructure);
@@ -36,27 +57,27 @@ int main(void)
         GPIO_WriteBit(GPIOC , GPIO_Pin_9 , (LEDval) ? Bit_SET : Bit_RESET);
         LEDval = 1 - LEDval;
 
-        Delay (250); // wait 250ms
+        Delay(1000); // wait 250ms
     }
 }
 // Timer code ..5 
 static __IO uint32_t TimingDelay;
 
-void Delay(uint32_t nTime){
+void Delay(uint32_t nTime) { // delay code defined here
     TimingDelay = nTime;
     while(TimingDelay != 0);
 }
 
-void SysTick_Handler(void){
+void SysTick_Handler(void) {
     if (TimingDelay != 0x00)
         TimingDelay --;
 }
 
 #ifdef USE_FULL_ASSERT
-void assert_failed(uint8_t* file , uint32_t line)
-{
-/* Infinite loop */
-/* Use GDB to find out why we're here */
-while (1);
-}
+    void assert_failed(uint8_t* file , uint32_t line)
+    {
+    /* Infinite loop */
+    /* Use GDB to find out why we're here */
+    while (1);
+    }
 #endif
