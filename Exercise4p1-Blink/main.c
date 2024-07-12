@@ -37,7 +37,6 @@ int main(void)
     GPIO_Init(GPIOC , &GPIO_InitStructure);
 
     // Configure SysTick Timer ..3 
-
     /* 
     Utilize a “timer tick” to measure the
     passage of time. 
