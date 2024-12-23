@@ -19,7 +19,7 @@ int main(void)
     uint32_t current_value = *APB2ENR_TEST; // read current value at address '0x40021018'
     *APB2ENR_TEST |= 0x10; // toggle bit that cooresponds to the peripheral clock for GPIOC. 
 
-    // below commented code does the same but uses macros 
+    // below commented code does the same as above but uses macros 
     // and the RCC Struct defined in the STD_peripheral 
     // library to access the memory address of APB2ENR. 
     // RCC->APB2ENR |= ((uint32_t)0x00000010);

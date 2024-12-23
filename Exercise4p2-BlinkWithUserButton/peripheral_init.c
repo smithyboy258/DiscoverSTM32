@@ -15,11 +15,11 @@ void Peripheral_Init(void) {
     GPIO_A_InitStructure.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_8;
     GPIO_A_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_A_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-    GPIO_Init(GPIOC , &GPIO_A_InitStructure);
+    GPIO_Init(GPIOA , &GPIO_A_InitStructure);
 
     // configure the user button pin
     GPIO_StructInit(&GPIO_C_Init_Structure);
     GPIO_C_Init_Structure.GPIO_Pin = GPIO_Pin_0;
     GPIO_C_Init_Structure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-    GPIO_Init(GPIOA , &GPIO_C_Init_Structure);
+    GPIO_Init(GPIOC , &GPIO_C_Init_Structure);
 }
