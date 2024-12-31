@@ -36,8 +36,8 @@ void spiInit(SPI_TypeDef *SPIx)
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
     GPIO_Init(GPIOB , &GPIO_InitStructure);
 
-   }  else  {  //  other SPI devices -- 
-
+  } 
+  else if(SPIx == SPI1) {
       // SPI1 config below
       RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE); 
 
@@ -54,6 +54,8 @@ void spiInit(SPI_TypeDef *SPIx)
       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
       GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
       GPIO_Init(GPIOB , &GPIO_InitStructure);
+  } 
+  else {  //  other SPI devices -- 
       return;
   }
 

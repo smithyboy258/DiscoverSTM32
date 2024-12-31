@@ -15,6 +15,7 @@ void main() {
   spiInit(SPI2);
 
   for (i = 0; i < 8; i++) {
+
     for (j = 0; j < 4; j++)
       txbuf[j] = i*4 + j;
 
@@ -28,6 +29,7 @@ void main() {
   }
 
   for (i = 0; i < 8; i++) {
+    
     for (j = 0; j < 4; j++)
       txbuf16[j] = i*4 + j + (i << 8);
 
