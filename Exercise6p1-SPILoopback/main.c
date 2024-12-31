@@ -29,7 +29,7 @@ void main() {
   }
 
   for (i = 0; i < 8; i++) {
-    
+
     for (j = 0; j < 4; j++)
       txbuf16[j] = i*4 + j + (i << 8);
 
@@ -52,9 +52,9 @@ void csInit() {
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE); 
 
-  // SCK and MOSI config as alternate function pushpull, output mode, maximum speed 50MHz
+  // SCK and MOSI config as general purpose pushpull, output mode, maximum speed 50MHz
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; // this would be GPIO_Mode_AF_PP if NSS SPI_NSS_Hard was configured. 
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(GPIOB , &GPIO_InitStructure);
 
