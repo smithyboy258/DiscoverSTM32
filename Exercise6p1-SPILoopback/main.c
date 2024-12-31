@@ -44,22 +44,23 @@ void main() {
 
 }
 
-// configuring chip select (CS) pin, or otherwise called the Slave Select Pin. Disco Board manaul says PB12 is appropriate, see page 17. 
+// configuring chip select (CS) pin, or otherwise called the Slave Select Pin. Disco Board manaul says the hardware NSS pin is PB12, see page 17. 
+// however, in software mode, we can use almost any GPIO pin, the book says to use PC3. 
 void csInit() {
   GPIO_InitTypeDef GPIO_InitStructure;
 
   GPIO_StructInit(&GPIO_InitStructure);
 
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE); 
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE); 
 
   // SCK and MOSI config as general purpose pushpull, output mode, maximum speed 50MHz
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; // this would be GPIO_Mode_AF_PP if NSS SPI_NSS_Hard was configured. 
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(GPIOB , &GPIO_InitStructure);
 
   // Making the Chip select pin high so it can be lowered later to select a device. 
-  GPIO_WriteBit(GPIOB , GPIO_Pin_12 , 1);
+  GPIO_WriteBit(GPIOB , GPIO_Pin_3 , 1);
 }
 
 #ifdef USE_FULL_ASSERT
