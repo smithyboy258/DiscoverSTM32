@@ -46,6 +46,8 @@ void main() {
 
 // configuring chip select (CS) pin, or otherwise called the Slave Select Pin. Disco Board manaul says the hardware NSS pin is PB12, see page 17. 
 // however, in software mode, we can use almost any GPIO pin, the book says to use PC3. 
+// You can still use PB12 as the NSS pin, since its still a GPIO, it will just ignore PB12's IO value. See page 560 of stm32f100xx reference manual for SSI bit
+// in the SPI control register 1 (SPI_CR1). 
 void csInit() {
   GPIO_InitTypeDef GPIO_InitStructure;
 
