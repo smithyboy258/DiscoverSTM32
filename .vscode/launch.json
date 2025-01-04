@@ -4,7 +4,7 @@
     {
         "name": "Cortex Debug",
         "cwd": "${workspaceRoot}",
-        "executable": "Exercise4p3-ConfigureWithoutPeriphLib/Exercise4p3-ConfigureWithoutPeriphLib.elf",
+        "executable": "Exercise6p1-SPILoopback/Exercise6p1-SPILoopback.elf",
         "request": "launch",
         "type": "cortex-debug",
         //"showDevDebugOutput": false,

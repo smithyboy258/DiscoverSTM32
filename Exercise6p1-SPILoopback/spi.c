@@ -33,13 +33,13 @@ void spiInit(SPI_TypeDef *SPIx)
 
     // MISO config as input pull-up
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
     GPIO_Init(GPIOB , &GPIO_InitStructure);
 
   } 
   else if(SPIx == SPI1) {
       // SPI1 config below
-      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE); 
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE); 
 
       // SCK and MOSI config as alternate function pushpull, output mode, maximum speed 50MHz
       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_7;
