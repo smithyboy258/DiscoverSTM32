@@ -4,52 +4,92 @@
 #include <stm32f10x_spi.h>
 #include "spi.h"
 
-uint8_t txbuf [4], rxbuf [4];
-uint16_t txbuf16 [4], rxbuf16 [4];
+/*
+Setup:
 
-void csInit(); 
+SPI lines are connected in loopback mode (MISO tied to MOSI)
+SS is arbitrarily PA8. 
 
-void main() {  
-  int i, j;
-  csInit(); // Initialize chip select PC03
-  spiInit(SPI2);
+Ought to see the same data pattern on MOSI as MISO w/
+a logic analyzer. 
 
-  for (i = 0; i < 8; i++) {
+Author has implemented an incrementing message for both 8 and
+16 bit SPI modes.
+*/
 
-    for (j = 0; j < 4; j++)
-      txbuf[j] = i*4 + j;
 
-      GPIO_WriteBit(GPIOB, GPIO_Pin_12, 0); 
-      spiReadWrite(SPI2, rxbuf, txbuf, 4, SPI_SLOW);
-      GPIO_WriteBit(GPIOB, GPIO_Pin_12, 1);
+static uint8_t txbuf[4], rxbuf[4];
+static uint16_t txbuf16[4], rxbuf16[4];
+static int i, j;
 
-    for (j = 0; j < 4; j++)
-      if (rxbuf[j] != txbuf[j])
-        assert_failed(__FILE__ , __LINE__);
-  }
+void csInit(void);
 
-  for (i = 0; i < 8; i++) {
+int main()
+{
+    csInit(); // CS initialization
+    spiInit(SPI2);
 
-    for (j = 0; j < 4; j++)
-      txbuf16[j] = i*4 + j + (i << 8);
-
-      GPIO_WriteBit(GPIOB,GPIO_Pin_12,0);
-      spiReadWrite16(SPI2 ,rxbuf16, txbuf16, 4, SPI_SLOW);
-      GPIO_WriteBit(GPIOB, GPIO_Pin_12, 1);
-
-    for (j = 0; j < 4; j++)
-      if (rxbuf16[j] != txbuf16[j])
-        assert_failed(__FILE__ , __LINE__);
-  }
-
+    //fill and xmit txbuf with 0-32 in 4 byte steps
+    for(i=0; i<8; ++i)
+    {
+        for(j = 0; j < 4; ++j)
+        {
+            txbuf[j] = i*4 + j;
+        }
+        GPIO_WriteBit(GPIOB, GPIO_Pin_12, 0); 
+        spiReadWrite(SPI2, rxbuf, txbuf, 4, SPI_SLOW);
+        GPIO_WriteBit(GPIOB, GPIO_Pin_12, 1);
+        for(j = 0; j < 4; ++j)
+        {   
+            //if something fails in loopback mode
+            if (rxbuf[j] != txbuf[j]) 
+            {
+                assert_failed(__FILE__, __LINE__);
+            }
+            
+        }
+    }
+    for (i = 0; i < 8; ++i);
+    {
+        for(j = 0; j < 4; ++j)
+        {
+            txbuf16[j] = i*4 + j + (i<<8); 
+            //author shifts bits past the 8th bit just 
+            //to prove we're in 16bit mode?
+        }
+        GPIO_WriteBit(GPIOB,GPIO_Pin_12,0);
+        spiReadWrite16(SPI2 ,rxbuf16, txbuf16, 4, SPI_SLOW);
+        GPIO_WriteBit(GPIOB, GPIO_Pin_12, 1);
+        for(j = 0; j < 4; ++j)
+        {
+            if(rxbuf16[j] != txbuf16[j])
+            {
+                assert_failed(__FILE__, __LINE__);
+            }
+        }
+    }
+  
+  return(0);
 }
 
-// configuring chip select (CS) pin, or otherwise called the Slave Select Pin. Disco Board manaul says the hardware NSS pin is PB12, see page 17. 
-// however, in software mode, we can use almost any GPIO pin, the book says to use PC3. 
-// You can still use PB12 as the NSS pin, since its still a GPIO, it will just ignore PB12's IO value. See page 560 of stm32f100xx reference manual for SSI bit
-// in the SPI control register 1 (SPI_CR1). 
-void csInit() {
-  //clock for GPIOB
+// Timer code
+static __IO uint32_t TimingDelay;
+
+void Delay(uint32_t nTime)
+{
+    TimingDelay = nTime;
+    while(TimingDelay !=0);
+}
+
+//CS pin init
+void csInit()
+{
+
+    //totally derailed by an incorrect call to the clock cmd (AHB vs APB)
+    //ended up looking at others repos - seems like a lot of people use B12 as CS
+    //almost any pin will do though
+
+    //clock for GPIOB
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
 
     //CS pin setup
@@ -63,11 +103,19 @@ void csInit() {
     GPIO_WriteBit(GPIOB, GPIO_Pin_12, 1);
 }
 
-#ifdef USE_FULL_ASSERT
-    void assert_failed(uint8_t* file , uint32_t line)
+void SysTick_Handler(void)
+{
+    if (TimingDelay != 0x00)
     {
+        TimingDelay--;
+    }
+}
+
+#ifdef USE_FULL_ASSERT
+void assert_failed(uint8_t* file , uint32_t line)
+{
     /* Infinite loop */
     /* Use GDB to find out why we're here */
     while (1);
-    }
+}
 #endif
