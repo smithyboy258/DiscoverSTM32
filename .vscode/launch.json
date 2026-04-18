@@ -4,7 +4,7 @@
     {
         "name": "Cortex Debug",
         "cwd": "${workspaceRoot}",
-        "executable": "Exercise6p2-SPI-EEPROM-Module/Exercise6p2-SPI-EEPROM-Module.elf",
+        "executable": "Exercise4p2-BlinkWithUserButton/Exercise4p2-BlinkWithUserButton.elf",
         "request": "launch",
         "type": "cortex-debug",
         //"showDevDebugOutput": false,

@@ -4,7 +4,24 @@
 
 #include "peripheral_init.h"
 
+/* Move this to the top of the file, above main() */
+static __IO uint32_t TimingDelay = 0; 
+
+void SysTick_Handler(void) {
+    /* Use a local snapshot to prevent multiple reads of a volatile variable 
+       during a single calculation, though for a simple decrement this is usually fine */
+    if (TimingDelay > 0) {
+        TimingDelay--;
+    }
+}
+
 void Delay(uint32_t nTime); // function Delay defined at top of file. 
+// Timer code
+void Delay(uint32_t nTime) { // delay code defined here
+    TimingDelay = nTime;
+    while(TimingDelay != 0);
+}
+
 
 int main(void)
 {
@@ -31,18 +48,6 @@ int main(void)
 
         Delay(1000); // wait 1s
     }
-}
-// Timer code
-static __IO uint32_t TimingDelay;
-
-void Delay(uint32_t nTime) { // delay code defined here
-    TimingDelay = nTime;
-    while(TimingDelay != 0);
-}
-
-void SysTick_Handler(void) {
-    if (TimingDelay != 0x00)
-        TimingDelay --;
 }
 
 #ifdef USE_FULL_ASSERT
