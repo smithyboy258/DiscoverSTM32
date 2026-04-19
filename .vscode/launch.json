@@ -4,7 +4,7 @@
     {
         "name": "Cortex Debug",
         "cwd": "${workspaceRoot}",
-        "executable": "Exercise4p2-BlinkWithUserButton/Exercise4p2-BlinkWithUserButton.elf",
+        "executable": "Exercise6p1-NoLibSpiLoopBack/Exercise6p1-NoLibSpiLoopBack.elf",
         "request": "launch",
         "type": "cortex-debug",
         //"showDevDebugOutput": false,
