@@ -4,9 +4,9 @@
 // Defines for SPI device and Pins used by EEPROM
 
 // port used for the CS select pin
-#define EEPROM_PORT GPIOB
-// cs select pin, on port B, this is PB12. 
-#define EEPROM_CS GPIO_Pin_12
+#define EEPROM_PORT GPIOC
+// cs select pin, pin 10 on port C (PC10)
+#define EEPROM_CS GPIO_Pin_10
 // book says to use an SPI_SLOW setting, which uses a prescaler of 64, to achieve a 0.375MHz SPI clock.
 #define EEPROM_SPEED SPI_SLOW
 // book says to use SPI device 2 on the STM32F100x
@@ -18,6 +18,9 @@ enum eepromCMD {
     cmdWREN = 0x06 , cmdWRDI = 0x04 ,
     cmdRDSR = 0x05 , cmdWRSR = 0x01 
 };
+
+// Putting the csInitialization here because its more specific to the EEPROM in this case 
+void csInit(); 
 
 // initializes the SPI configurations and CS pin for the EEPROM
 void eepromInit ();

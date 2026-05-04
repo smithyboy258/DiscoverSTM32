@@ -14,7 +14,5 @@ int spiReadWrite16(SPI_TypeDef* SPIx, uint16_t *rbuf,
                    const uint16_t *tbuf, int cnt, 
                    enum spiSpeed speed);
 
-// adding chip select pin initialization, I will just make it use PB12. 
-void csInit(void);
 
 #endif

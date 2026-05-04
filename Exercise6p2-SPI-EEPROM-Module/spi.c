@@ -136,24 +136,3 @@ int spiReadWrite16(SPI_TypeDef *SPIx, uint16_t *rbuf,
     return 1;
 }  
 
-//CS pin init
-void csInit()
-{
-    // configuring chip select (CS) pin, or otherwise called the Slave Select Pin. Disco Board manaul says the hardware NSS pin is PB12, see page 17. 
-    // however, in software mode, we can use almost any GPIO pin, the book says to use PC10. 
-    // You can still use PB12 as the NSS pin, since its still a GPIO, it will just ignore PB12's IO value. See page 560 of stm32f100xx reference manual for SSI bit
-    // in the SPI control register 1 (SPI_CR1). 
-
-    //clock for GPIOB
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
-
-    //CS pin setup
-    GPIO_InitTypeDef GPIO_InitStructure;
-    GPIO_StructInit(&GPIO_InitStructure);
-    //pin specs
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOB,&GPIO_InitStructure);
-    GPIO_WriteBit(GPIOB, GPIO_Pin_12, 1);
-}
