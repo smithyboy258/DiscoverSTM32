@@ -8,10 +8,12 @@
 int main() {
     // if (SysTick_Config(SystemCoreClock / 1000)) // Every 1 msec, the timer triggers a call to the SysTick_Handler
     //     while(1);
-
+    ST7735_init();
+    ST7735_backLight(1);
+    
     while(1) {
         // code go here
-        fillScreen(BLUE);
+        fillScreen(LBLUE);
     }
 }
 

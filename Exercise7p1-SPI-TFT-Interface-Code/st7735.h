@@ -25,6 +25,7 @@
 #define GPIO_PIN_SCE GPIO_Pin_0
 // LCD Reset assigned to PC1
 #define GPIO_PIN_RST GPIO_Pin_1
+
 // Backlight Control Port will be GPIO Port A
 #define LCD_PORT_BKL GPIOA
 // Backlight Control (BKL) assigned to PA1

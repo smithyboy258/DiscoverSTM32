@@ -61,9 +61,9 @@ void ST7735_pushColor(uint16_t *color , int cnt) {
 
 void ST7735_backLight(uint8_t on) {
     if (on)
-    GPIO_WriteBit(LCD_PORT_BKL, GPIO_PIN_BKL, LOW);
-    else
     GPIO_WriteBit(LCD_PORT_BKL, GPIO_PIN_BKL, HIGH);
+    else
+    GPIO_WriteBit(LCD_PORT_BKL, GPIO_PIN_BKL, LOW);
 }
 
 // Listing 7.3: ST7735 Initialization Commands
@@ -134,8 +134,31 @@ static const struct ST7735_cmdBuf initializers[] = {
 void ST7735_init () {
     GPIO_InitTypeDef GPIO_InitStructure;
     const struct ST7735_cmdBuf *cmd;
+
+    GPIO_StructInit(&GPIO_InitStructure);
     // set up pins
-    /* ... */
+
+    // enable clocks for Port C and A. 
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOA,ENABLE);
+
+    // PORT C Pins: all pins will be configured as Out Push Pull with 50Mhz clock speeds. 
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStructure.GPIO_Pin   = GPIO_PIN_SCE | GPIO_PIN_RST | GPIO_PIN_DC; 
+    GPIO_Init(LCD_PORT, &GPIO_InitStructure);
+
+    // PORT A: Backlight pin will also just be an on/off pin. Configured the same way as above. 
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStructure.GPIO_Pin = GPIO_PIN_BKL;
+    GPIO_Init(LCD_PORT_BKL,&GPIO_InitStructure);
+
+    // Initialize the SPI interface
+    spiInit(SPILCD);
+
+    // Call SysTick Config to enable Delays 
+    if (SysTick_Config(SystemCoreClock / 1000)) // 24MHz/1000 = 1 msec ticks, triggers a call to the SysTick_Handler every 1 ms. 
+        while(1);
 
     // set cs , reset low
     GPIO_WriteBit(LCD_PORT ,GPIO_PIN_SCE , HIGH);
@@ -150,9 +173,9 @@ void ST7735_init () {
     for (cmd = initializers; cmd->command; cmd ++) {
         LcdWrite(LCD_C , &(cmd->command), 1);
         if (cmd->len)
-        LcdWrite(LCD_D , cmd->data , cmd->len);
+            LcdWrite(LCD_D , cmd->data , cmd->len);
         if (cmd->delay)
-        Delay(cmd ->delay);
+            Delay(cmd->delay);
     }
 }
 

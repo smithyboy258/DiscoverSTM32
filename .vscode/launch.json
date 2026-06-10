@@ -4,7 +4,7 @@
     {
         "name": "Cortex Debug",
         "cwd": "${workspaceRoot}",
-        "executable": "Exercise6p2-SPI-EEPROM-Module/Exercise6p2-SPI-EEPROM-Module.elf",
+        "executable": "Exercise7p1-SPI-TFT-Interface-Code/Exercise7p1-SPI-TFT-Interface-Code.elf",
         "request": "launch",
         "type": "cortex-debug",
         //"showDevDebugOutput": false,
