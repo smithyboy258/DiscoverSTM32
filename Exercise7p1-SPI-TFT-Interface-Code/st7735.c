@@ -194,6 +194,69 @@ void fillScreen(uint16_t color) {
     }
 }
 
+// exercise 7.2, display text. 
+void drawChar(uint16_t x, uint16_t y, char c, uint16_t fgColor, uint16_t bgColor) {
+    uint16_t block[60]; // 6 columns x 10 rows = 60 pixels
+
+    // Bounds check so we don't wrap off the edge of the 128x160 screen
+    if ((x + 5 >= ST7735_width) || (y + 9 >= ST7735_height)) {
+        return;
+    }
+
+    // 1. Pre-fill the entire 6x10 cell with the background color.
+    //    This automatically handles the 1-pixel right margin (col 5)
+    //    and the 3-pixel bottom line spacing (rows 7, 8, 9).
+    for (int i = 0; i < 60; i++) {
+        block[i] = bgColor;
+    }
+
+    // 2. Overlay the 5x7 foreground pixels from the font lookup table
+    const uint8_t *glyph = &ASCII[(uint8_t)c * 5];
+
+    for (int col = 0; col < 5; col++) {
+        uint8_t colData = glyph[col];
+        for (int row = 0; row < 7; row++) {
+            if (colData & (1 << row)) {
+                block[(row * 6) + col] = fgColor;
+            }
+        }
+    }
+
+    // 3. Set the 6x10 bounding box and push all 60 pixels in one SPI burst
+    ST7735_setAddrWindow(x, y, x + 5, y + 9, MADCTLGRAPHICS);
+    ST7735_pushColor(block, 60);
+}
+
+void drawString(uint16_t x, uint16_t y, const char *str, uint16_t fgColor, uint16_t bgColor) {
+    uint16_t cursorX = x;
+    uint16_t cursorY = y;
+
+    while (*str != '\0') {
+        char c = *str++;
+        // Handle newline: move to start of next line (10px tall cell)
+        if (c == '\n') {
+            cursorX = x;
+            cursorY += 10;
+            continue;
+        }
+        // Ignore carriage return so "\r\n" strings don't double-step
+        if (c == '\r') {
+            continue;
+        }
+        // Optional: wrap to next line if the next 6px character exceeds screen width
+        if (cursorX + 5 >= ST7735_width) {
+            cursorX = x;
+            cursorY += 10;
+        }
+        // Stop if we've scrolled past the bottom of the screen
+        if (cursorY + 9 >= ST7735_height) {
+            break;
+        }
+        drawChar(cursorX, cursorY, c, fgColor, bgColor);
+        cursorX += 6; // Advance by 6px (5px glyph + 1px spacing)
+    }
+}
+
 static __IO uint32_t TimingDelay;
 void Delay(uint32_t nTime) {
     TimingDelay = nTime;

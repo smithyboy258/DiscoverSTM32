@@ -11,6 +11,7 @@
 #define BLACK            0x0000
 #define BLUE             0x001F
 #define GREEN            0x07E0
+#define DGREEN           0x03E0
 #define LBLUE            0x07FF
 #define RED              0xF800
 #define YELLOW           0xFFE0
@@ -53,7 +54,14 @@
 #define ST7735_RAMWR 0x2C
 #define ST7735_RAMRD 0x2E
 #define ST7735_COLMOD 0x3A
-#define MADVAL(x) (((x) << 5) | 8)
+// if this is defined as (x) << 5 | 8, it will swap from using the RGB standard to BGR standard, swapping all the colors. 
+// this is because bit 3 of the madctl register determines the RGG or BGR order. Its dependent on how the TFT is physically wired. 
+// so the ST7735 swaps allows a configurable color order. 
+#define MADVAL(x) (((x) << 5) | 0)
+
+// ASCII array defined in glcdfont.c taken from the ADAfruit GFX github library. 
+// https://github.com/adafruit/Adafruit-GFX-Library/blob/master/src/glcdfont.c
+extern const uint8_t ASCII [];
 
 void ST7735_setAddrWindow(uint16_t x0 , uint16_t y0 , uint16_t x1 , uint16_t y1 , uint8_t madctl);
 
@@ -64,6 +72,10 @@ void ST7735_backLight(uint8_t on);
 void ST7735_init();
 
 void fillScreen(uint16_t color); 
+
+void drawChar(uint16_t x, uint16_t y, char c, uint16_t fgColor, uint16_t bgColor);
+
+void drawString(uint16_t x, uint16_t y, const char *str, uint16_t fgColor, uint16_t bgColor);
 
 void Delay(uint32_t nTime);
 

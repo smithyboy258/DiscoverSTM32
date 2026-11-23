@@ -13,8 +13,37 @@ int main() {
     
     while(1) {
         // code go here
-        fillScreen(LBLUE);
+        fillScreen(RED);
+        Delay(1000);
+        fillScreen(GREEN);
+        Delay(1000);
+        fillScreen(BLUE);
+        Delay(1000);
+        fillScreen(WHITE);
+        drawString(10, 80, "RGB test complete", DGREEN, WHITE);
+        Delay(10000);
     }
+
+// Draw String Test Exercise 7.2, TFT display can display a 337 character string
+    // drawString(0, 0,
+    // "0123456789ABCDEFGHIJK"
+    // "LMNOPQRSTUVWXYZ012345"
+    // "6789ABCDEFGHIJKLMNOPQ"
+    // "RSTUVWXYZ0123456789AB"
+    // "CDEFGHIJKLMNOPQRSTUVWXY"
+    // "Z0123456789ABCDEFGHIJ"
+    // "KLMNOPQRSTUVWXYZ01234"
+    // "56789ABCDEFGHIJKLMNOP"
+    // "QRSTUVWXYZ0123456789A"
+    // "BCDEFGHIJKLMNOPQRSTUV"
+    // "WXYZ0123456789ABCDEFG"
+    // "HIJKLMNOPQRSTUVWXYZ01"
+    // "23456789ABCDEFGHIJKLM"
+    // "NOPQRSTUVWXYZ01234567"
+    // "89ABCDEFGHIJKLMNOPQRS"
+    // "TUVWXYZ0123456789AB",
+    // WHITE, BLACK);
+
 }
 
 #ifdef USE_FULL_ASSERT
